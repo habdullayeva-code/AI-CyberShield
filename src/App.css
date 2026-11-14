@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -6,41 +7,217 @@
 
 body {
   background-color: #080d18;
-  color: #ffffff;
+  color: white;
   font-family: Arial, sans-serif;
 }
 
 .app {
+  display: flex;
   min-height: 100vh;
-  padding: 40px;
 }
 
-header {
-  border-bottom: 1px solid #1e293b;
-  padding-bottom: 25px;
+.sidebar {
+  width: 250px;
+  background-color: #111827;
+  padding: 30px 20px;
+  border-right: 1px solid #263244;
 }
 
-header h1 {
+.sidebar h2 {
   color: #38bdf8;
-  font-size: 32px;
+  margin-bottom: 50px;
 }
 
-header p {
+.sidebar nav p {
+  padding: 15px;
+  margin-bottom: 10px;
   color: #94a3b8;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.sidebar nav p:hover {
+  background-color: #1e293b;
+  color: white;
+}
+
+.sidebar nav p.active {
+  background-color: #0c4a6e;
+  color: #38bdf8;
+  font-weight: bold;
+  border-left: 3px solid #38bdf8;
+}
+
+.main-content {
+  flex: 1;
+  padding: 50px;
+}
+
+.main-content h1 {
+  font-size: 32px;
+  margin-bottom: 18px;
+  color: #f1f5f9;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.main-content p {
+  color: #94a3b8;
+}
+
+.description {
+  color: #94a3b8;
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 35px;
+  align-items: stretch;
+}
+
+.scan-card {
+  flex: 1;
+  background-color: #111827;
+  border: 1px solid #263244;
+  border-radius: 12px;
+  padding: 25px;
+}
+
+.scan-card {
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.scan-card:hover {
+  transform: translateY(-5px);
+  border-color: #38bdf8;
+}
+
+.scan-card h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.scan-card p {
+  margin-bottom: 20px;
+}
+
+.scan-card input,
+.scan-card textarea {
+  width: 100%;
+  padding: 13px;
+  background-color: #080d18;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  color: white;
+  margin-bottom: 15px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.scan-card input:focus,
+.scan-card textarea:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+}
+
+.scan-card textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.scan-card button {
+  background-color: #0284c7;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.scan-card button:hover {
+  background-color: #0ea5e9;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 165, 233, 0.25);
+}
+
+.result-panel {
+  margin-top: 30px;
+  padding: 30px;
+  background: linear-gradient(135deg, #111827, #172554);
+  border: 1px solid #263244;
+  border-radius: 14px;
+  min-height: 130px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.result-panel h2 {
+  margin-bottom: 18px;
+  color: #38bdf8;
+  font-size: 21px;
+}
+
+.result-panel p {
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.scan-card ul {
+  list-style-position: inside;
+  padding-left: 0;
   margin-top: 10px;
 }
 
-main {
-  margin-top: 80px;
-  text-align: center;
-}
-
-main h2 {
-  font-size: 30px;
-  margin-bottom: 15px;
-}
-
-main p {
+.scan-card li {
+  margin-bottom: 12px;
+  padding-left: 0;
   color: #94a3b8;
-  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 20px;
+  }
+
+  .sidebar nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .sidebar nav p {
+    margin-bottom: 0;
+  }
+
+  .main-content {
+    padding: 25px;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scan-card input::placeholder,
+.scan-card textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
 }
