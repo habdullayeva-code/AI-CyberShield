@@ -1,46 +1,107 @@
 
 import { useState } from 'react'
 import './App.css'
+const API_BASE_URL = 'http://192.168.102.57:8000'
 
 function App() {
   const [result, setResult] = useState('')
+  const [analysisData, setAnalysisData] = useState(null)
   const [activePage, setActivePage] = useState('Dashboard')
   const [history, setHistory] = useState([])
   const [url, setUrl] = useState('')
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
-function analyzeURL() {
+async function analyzeURL() {
   if (url.trim() === '') {
     setResult('Please enter a URL first!')
     return
   }
 
-  setResult('URL analysis will be available after AI integration.')
-  setHistory((oldHistory) => [
-    ...oldHistory,
-    {
-      type: 'URL',
-      value: url,
-      date: new Date().toLocaleString()
+  setLoading(true)
+  setAnalysisData(null)
+  setResult('Analyzing URL...')
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/scan`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        target: url.trim(),
+        scan_type: 'url'
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('Analysis failed')
     }
-  ])
+
+    const data = await response.json()
+
+    setAnalysisData(data)
+    setResult('')
+
+    setHistory((oldHistory) => [
+      ...oldHistory,
+      {
+        type: 'URL',
+        value: url,
+        date: new Date().toLocaleString()
+      }
+    ])
+  } catch (error) {
+    setResult('Could not connect to the backend. Please try again.')
+  } finally {
+    setLoading(false)
+  }
 }
 
-function analyzeMessage() {
+async function analyzeMessage() {
   if (message.trim() === '') {
     setResult('Please enter a message first!')
     return
   }
 
-  setResult('Message analysis will be available after AI integration.')
-  setHistory((oldHistory) => [
-    ...oldHistory,
-    {
-      type: 'Message',
-      value: message,
-      date: new Date().toLocaleString()
+  setLoading(true)
+  setAnalysisData(null)
+  setResult('Analyzing message...')
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/scan`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        target: message.trim(),
+        scan_type: 'text'
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('Analysis failed')
     }
-  ])
+
+    const data = await response.json()
+
+    setAnalysisData(data)
+    setResult('')
+
+    setHistory((oldHistory) => [
+      ...oldHistory,
+      {
+        type: 'Message',
+        value: message,
+        date: new Date().toLocaleString()
+      }
+    ])
+  } catch (error) {
+    setResult('Could not connect to the backend. Please try again.')
+  } finally {
+    setLoading(false)
+  }
 }
 const totalAnalyses = history.length
 
@@ -214,7 +275,9 @@ const messageAnalyses = history.filter(
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                     />
-                    <button onClick={analyzeURL}>Analyze URL</button>
+                    <button onClick={analyzeURL} disabled={loading}>
+  {loading ? 'Analyzing...' : 'Analyze URL'}
+</button>
                   </div>
 
               <div className="scan-card">
@@ -225,14 +288,32 @@ const messageAnalyses = history.filter(
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 ></textarea>
-                <button onClick={analyzeMessage}>Analyze Message</button>
+                <button onClick={analyzeMessage} disabled={loading}>
+  {loading ? 'Analyzing...' : 'Analyze Message'}
+</button>
               </div>
             </div>
-
             <div className="result-panel">
               <h2>Analysis Result</h2>
-              <p>{result || 'Your analysis results will appear here.'}</p>
-            </div>
+
+              {analysisData ? (
+                <>
+                    <span className={`result-status ${analysisData.status}`}>
+                      {analysisData.status.toUpperCase()}
+                    </span>
+
+                    <div className="risk-score">
+                      Risk Score: {analysisData.risk_score}%
+                    </div>
+
+                    <p className="ai-explanation">
+                      {analysisData.ai_analysis}
+                    </p>
+                  </>
+                ) : (
+                  <p>{result || 'Your analysis results will appear here.'}</p>
+                )}
+              </div>
           </div>
           ) : null}
           </div>

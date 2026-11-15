@@ -221,3 +221,46 @@ body {
   color: #64748b;
   opacity: 1;
 }
+
+.result-status {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.result-status.safe {
+  background-color: #064e3b;
+  color: #6ee7b7;
+}
+
+.result-status.suspicious {
+  background-color: #713f12;
+  color: #fde68a;
+}
+
+.result-status.malicious {
+  background-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+.risk-score {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #38bdf8;
+}
+
+.ai-explanation {
+  margin-top: 15px;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.scan-card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
